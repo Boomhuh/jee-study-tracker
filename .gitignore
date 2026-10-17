@@ -1,0 +1,21 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# Streamlit run cache
+.streamlit/
+
+# Local testing
+.pytest_cache/
+
+# User uploaded media & local PDFs
+chapter_resources/*
+!chapter_resources/.gitkeep
+

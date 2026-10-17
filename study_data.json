@@ -1,0 +1,498 @@
+{
+  "settings": {
+    "dark_mode": true,
+    "target_exam_date": "2028-01-24T09:00:00",
+    "daily_goal_minutes": 360,
+    "auto_dark_mode": false
+  },
+  "pomodoro_stats": {
+    "sessions_completed": 0,
+    "total_minutes": 0
+  },
+  "daily_focus": {
+    "date": "2026-10-17",
+    "items": [
+      {
+        "key": "Chemistry:aba940de:89ff04bf",
+        "subject": "Chemistry",
+        "chapter_id": "aba940de",
+        "chapter_name": "Chemical Bonding & Molecular Structure",
+        "title": "Molecular Orbital Theory (MOT) & Bond Order",
+        "priority": "High",
+        "difficulty": "Hard",
+        "due_date": "",
+        "estimated_minutes": 0,
+        "is_custom": false,
+        "done": false
+      },
+      {
+        "key": "Mathematics:91c8e248:dcb89f38",
+        "subject": "Mathematics",
+        "chapter_id": "91c8e248",
+        "chapter_name": "Matrices & Determinants",
+        "title": "Adjoint, Inverse, & System of Linear Equations (Cramer's Rule)",
+        "priority": "High",
+        "difficulty": "Hard",
+        "due_date": "",
+        "estimated_minutes": 0,
+        "is_custom": false,
+        "done": false
+      },
+      {
+        "key": "Mathematics:ff4a5670:ccb144b8",
+        "subject": "Mathematics",
+        "chapter_id": "ff4a5670",
+        "chapter_name": "Quadratic Equations",
+        "title": "Location of Roots (Advanced Conditions)",
+        "priority": "High",
+        "difficulty": "Hard",
+        "due_date": "",
+        "estimated_minutes": 0,
+        "is_custom": false,
+        "done": false
+      },
+      {
+        "key": "Physics:767a01ed:246fd7c0",
+        "subject": "Physics",
+        "chapter_id": "767a01ed",
+        "chapter_name": "Kinematics & Projectile Motion",
+        "title": "Rain-Man & River-Boat Problems",
+        "priority": "High",
+        "difficulty": "Hard",
+        "due_date": "",
+        "estimated_minutes": 0,
+        "is_custom": false,
+        "done": false
+      },
+      {
+        "key": "Physics:767a01ed:a4e5ab49",
+        "subject": "Physics",
+        "chapter_id": "767a01ed",
+        "chapter_name": "Kinematics & Projectile Motion",
+        "title": "Solve 2019-2024 PYQs",
+        "priority": "High",
+        "difficulty": "Hard",
+        "due_date": "",
+        "estimated_minutes": 0,
+        "is_custom": false,
+        "done": false
+      },
+      {
+        "key": "Chemistry:0999adb7:aaabbf93",
+        "subject": "Chemistry",
+        "chapter_id": "0999adb7",
+        "chapter_name": "Atomic Structure",
+        "title": "Bohr's Model & Rydberg Formula",
+        "priority": "High",
+        "difficulty": "Medium",
+        "due_date": "",
+        "estimated_minutes": 0,
+        "is_custom": false,
+        "done": false
+      },
+      {
+        "key": "Chemistry:aba940de:31de9f8e",
+        "subject": "Chemistry",
+        "chapter_id": "aba940de",
+        "chapter_name": "Chemical Bonding & Molecular Structure",
+        "title": "Hybridization (sp, sp2, sp3, sp3d)",
+        "priority": "High",
+        "difficulty": "Medium",
+        "due_date": "",
+        "estimated_minutes": 0,
+        "is_custom": false,
+        "done": false
+      },
+      {
+        "key": "Mathematics:91c8e248:79c845fe",
+        "subject": "Mathematics",
+        "chapter_id": "91c8e248",
+        "chapter_name": "Matrices & Determinants",
+        "title": "Determinant Properties & Row/Col Operations",
+        "priority": "High",
+        "difficulty": "Medium",
+        "due_date": "",
+        "estimated_minutes": 0,
+        "is_custom": false,
+        "done": false
+      },
+      {
+        "key": "Physics:767a01ed:5ef15ba7",
+        "subject": "Physics",
+        "chapter_id": "767a01ed",
+        "chapter_name": "Kinematics & Projectile Motion",
+        "title": "2D Motion & Projectile Problems",
+        "priority": "High",
+        "difficulty": "Medium",
+        "due_date": "",
+        "estimated_minutes": 0,
+        "is_custom": false,
+        "done": false
+      },
+      {
+        "key": "Physics:14071055:be9f201e",
+        "subject": "Physics",
+        "chapter_id": "14071055",
+        "chapter_name": "Laws of Motion & Friction",
+        "title": "Free Body Diagrams & Newton's 2nd Law",
+        "priority": "High",
+        "difficulty": "Medium",
+        "due_date": "",
+        "estimated_minutes": 0,
+        "is_custom": false,
+        "done": false
+      }
+    ]
+  },
+  "streak": {
+    "current": 0,
+    "best": 0,
+    "last_active_date": ""
+  },
+  "daily_log": {},
+  "revision_schedule": [],
+  "mock_tests": [],
+  "custom_formulas": {
+    "Physics": {},
+    "Chemistry": {},
+    "Mathematics": {}
+  },
+  "chapter_resources": {},
+  "subjects": {
+    "Physics": {
+      "progress": 0.0,
+      "chapters": [
+        {
+          "id": "767a01ed",
+          "name": "Kinematics & Projectile Motion",
+          "priority": "High",
+          "weightage": "High (8-12 M)",
+          "due_date": "",
+          "progress": 0.0,
+          "notes": "",
+          "tasks": [
+            {
+              "id": "b10a10c8",
+              "title": "Theory & 1D Motion Equations",
+              "completed": false,
+              "priority": "High",
+              "difficulty": "Easy",
+              "due_date": "",
+              "progress": 0.0,
+              "subtasks": [],
+              "estimated_minutes": 0
+            },
+            {
+              "id": "5ef15ba7",
+              "title": "2D Motion & Projectile Problems",
+              "completed": false,
+              "priority": "High",
+              "difficulty": "Medium",
+              "due_date": "",
+              "progress": 0.0,
+              "subtasks": [],
+              "estimated_minutes": 0
+            },
+            {
+              "id": "1e2cd620",
+              "title": "Relative Velocity in 2D",
+              "completed": false,
+              "priority": "Medium",
+              "difficulty": "Hard",
+              "due_date": "",
+              "progress": 0.0,
+              "subtasks": [
+                {
+                  "id": "246fd7c0",
+                  "title": "Rain-Man & River-Boat Problems",
+                  "completed": false,
+                  "priority": "High",
+                  "difficulty": "Hard",
+                  "due_date": "",
+                  "progress": 0.0,
+                  "subtasks": [],
+                  "estimated_minutes": 0
+                },
+                {
+                  "id": "f4fe372b",
+                  "title": "Wind-Airplane Motion",
+                  "completed": false,
+                  "priority": "Medium",
+                  "difficulty": "Medium",
+                  "due_date": "",
+                  "progress": 0.0,
+                  "subtasks": [],
+                  "estimated_minutes": 0
+                }
+              ],
+              "estimated_minutes": 0
+            },
+            {
+              "id": "a4e5ab49",
+              "title": "Solve 2019-2024 PYQs",
+              "completed": false,
+              "priority": "High",
+              "difficulty": "Hard",
+              "due_date": "",
+              "progress": 0.0,
+              "subtasks": [],
+              "estimated_minutes": 0
+            },
+            {
+              "id": "63b36792",
+              "title": "Solve DC Pandey Level 2",
+              "completed": false,
+              "priority": "Medium",
+              "difficulty": "Hard",
+              "due_date": "",
+              "estimated_minutes": 120,
+              "progress": 0.0,
+              "subtasks": []
+            }
+          ]
+        },
+        {
+          "id": "14071055",
+          "name": "Laws of Motion & Friction",
+          "priority": "High",
+          "weightage": "High (8-12 M)",
+          "due_date": "",
+          "progress": 0.0,
+          "notes": "",
+          "tasks": [
+            {
+              "id": "be9f201e",
+              "title": "Free Body Diagrams & Newton's 2nd Law",
+              "completed": false,
+              "priority": "High",
+              "difficulty": "Medium",
+              "due_date": "",
+              "progress": 0.0,
+              "subtasks": [],
+              "estimated_minutes": 0
+            },
+            {
+              "id": "88912b7d",
+              "title": "Pulley & Constraint Systems",
+              "completed": false,
+              "priority": "Medium",
+              "difficulty": "Hard",
+              "due_date": "",
+              "progress": 0.0,
+              "subtasks": [],
+              "estimated_minutes": 0
+            },
+            {
+              "id": "95eba840",
+              "title": "Static & Kinetic Friction Problems",
+              "completed": false,
+              "priority": "High",
+              "difficulty": "Medium",
+              "due_date": "",
+              "progress": 0.0,
+              "subtasks": [],
+              "estimated_minutes": 0
+            }
+          ]
+        }
+      ]
+    },
+    "Chemistry": {
+      "progress": 0.0,
+      "chapters": [
+        {
+          "id": "aba940de",
+          "name": "Chemical Bonding & Molecular Structure",
+          "priority": "High",
+          "weightage": "High (8-12 M)",
+          "due_date": "",
+          "progress": 0.0,
+          "notes": "",
+          "tasks": [
+            {
+              "id": "b1192d86",
+              "title": "VSEPR Theory & Shapes of Molecules",
+              "completed": false,
+              "priority": "High",
+              "difficulty": "Easy",
+              "due_date": "",
+              "progress": 0.0,
+              "subtasks": [],
+              "estimated_minutes": 0
+            },
+            {
+              "id": "31de9f8e",
+              "title": "Hybridization (sp, sp2, sp3, sp3d)",
+              "completed": false,
+              "priority": "High",
+              "difficulty": "Medium",
+              "due_date": "",
+              "progress": 0.0,
+              "subtasks": [],
+              "estimated_minutes": 0
+            },
+            {
+              "id": "89ff04bf",
+              "title": "Molecular Orbital Theory (MOT) & Bond Order",
+              "completed": false,
+              "priority": "High",
+              "difficulty": "Hard",
+              "due_date": "",
+              "progress": 0.0,
+              "subtasks": [],
+              "estimated_minutes": 0
+            },
+            {
+              "id": "0355971a",
+              "title": "Dipole Moments & Hydrogen Bonding",
+              "completed": false,
+              "priority": "Medium",
+              "difficulty": "Medium",
+              "due_date": "",
+              "progress": 0.0,
+              "subtasks": [],
+              "estimated_minutes": 0
+            }
+          ]
+        },
+        {
+          "id": "0999adb7",
+          "name": "Atomic Structure",
+          "priority": "Medium",
+          "weightage": "Medium (4-8 M)",
+          "due_date": "",
+          "progress": 0.0,
+          "notes": "",
+          "tasks": [
+            {
+              "id": "aaabbf93",
+              "title": "Bohr's Model & Rydberg Formula",
+              "completed": false,
+              "priority": "High",
+              "difficulty": "Medium",
+              "due_date": "",
+              "progress": 0.0,
+              "subtasks": [],
+              "estimated_minutes": 0
+            },
+            {
+              "id": "8d1528cd",
+              "title": "de Broglie Wavelength & Heisenberg Uncertainty",
+              "completed": false,
+              "priority": "Medium",
+              "difficulty": "Medium",
+              "due_date": "",
+              "progress": 0.0,
+              "subtasks": [],
+              "estimated_minutes": 0
+            },
+            {
+              "id": "5d71d0c6",
+              "title": "Quantum Numbers & Electronic Configurations",
+              "completed": false,
+              "priority": "High",
+              "difficulty": "Easy",
+              "due_date": "",
+              "progress": 0.0,
+              "subtasks": [],
+              "estimated_minutes": 0
+            }
+          ]
+        }
+      ]
+    },
+    "Mathematics": {
+      "progress": 0.0,
+      "chapters": [
+        {
+          "id": "ff4a5670",
+          "name": "Quadratic Equations",
+          "priority": "High",
+          "weightage": "Medium (4-8 M)",
+          "due_date": "",
+          "progress": 0.0,
+          "notes": "",
+          "tasks": [
+            {
+              "id": "cde8d82f",
+              "title": "Roots, Discriminant, & Nature of Roots",
+              "completed": false,
+              "priority": "High",
+              "difficulty": "Easy",
+              "due_date": "",
+              "progress": 0.0,
+              "subtasks": [],
+              "estimated_minutes": 0
+            },
+            {
+              "id": "ccb144b8",
+              "title": "Location of Roots (Advanced Conditions)",
+              "completed": false,
+              "priority": "High",
+              "difficulty": "Hard",
+              "due_date": "",
+              "progress": 0.0,
+              "subtasks": [],
+              "estimated_minutes": 0
+            },
+            {
+              "id": "e65d1aa9",
+              "title": "Transformation of Equations & Symmetric Functions",
+              "completed": false,
+              "priority": "Medium",
+              "difficulty": "Medium",
+              "due_date": "",
+              "progress": 0.0,
+              "subtasks": [],
+              "estimated_minutes": 0
+            }
+          ]
+        },
+        {
+          "id": "91c8e248",
+          "name": "Matrices & Determinants",
+          "priority": "High",
+          "weightage": "High (8-12 M)",
+          "due_date": "",
+          "progress": 0.0,
+          "notes": "",
+          "tasks": [
+            {
+              "id": "e37e07af",
+              "title": "Matrix Multiplication & Properties",
+              "completed": false,
+              "priority": "High",
+              "difficulty": "Easy",
+              "due_date": "",
+              "progress": 0.0,
+              "subtasks": [],
+              "estimated_minutes": 0
+            },
+            {
+              "id": "79c845fe",
+              "title": "Determinant Properties & Row/Col Operations",
+              "completed": false,
+              "priority": "High",
+              "difficulty": "Medium",
+              "due_date": "",
+              "progress": 0.0,
+              "subtasks": [],
+              "estimated_minutes": 0
+            },
+            {
+              "id": "dcb89f38",
+              "title": "Adjoint, Inverse, & System of Linear Equations (Cramer's Rule)",
+              "completed": false,
+              "priority": "High",
+              "difficulty": "Hard",
+              "due_date": "",
+              "progress": 0.0,
+              "subtasks": [],
+              "estimated_minutes": 0
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
