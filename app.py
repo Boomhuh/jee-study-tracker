@@ -2314,6 +2314,33 @@ def main() -> None:
     data = dm.ensure_schema_migration(st.session_state.study_data)
     st.session_state.study_data = data
 
+    # Automatic Cloud Sync on Startup (runs once per user session)
+    if "cloud_sync_checked" not in st.session_state:
+        st.session_state.cloud_sync_checked = True
+        sec_token = ""
+        sec_gist_id = ""
+        try:
+            sec_token = st.secrets.get("GITHUB_TOKEN", "")
+            sec_gist_id = st.secrets.get("GIST_ID", "")
+        except Exception:
+            pass
+
+        cfg = dm.get_cloud_sync_config(data)
+        token = cfg["github_token"] or sec_token
+        gist_id = cfg["gist_id"] or sec_gist_id
+
+        if cfg["auto_sync"] and token and gist_id:
+            try:
+                res = dm.pull_from_github_gist(token, gist_id)
+                if res.get("success"):
+                    remote_data = res.get("data", {})
+                    migrated = dm.ensure_schema_migration(remote_data)
+                    dm.save_data(migrated, auto_cloud_sync=False)
+                    st.session_state.study_data = migrated
+                    data = migrated
+            except Exception:
+                pass
+
     # Check celebratory toast
     if "toast_msg" in st.session_state:
         msg = st.session_state.pop("toast_msg")
@@ -2471,6 +2498,14 @@ def main() -> None:
             token_val = st.text_input("GitHub Token (PAT with 'gist' scope)", value=curr_token, type="password", key="sync_token_input", help="Generate at github.com/settings/tokens with 'gist' permission.")
             gist_val = st.text_input("Gist ID (leave empty to create new)", value=curr_gist, key="sync_gist_input", placeholder="e.g. 7f3a8b... or empty to create new")
 
+            auto_val = st.checkbox("⚡ Auto-Sync continuously in background", value=bool(cloud_settings.get("auto_sync", True)), key="chk_auto_sync", help="Automatically pushes data on every change and pulls latest data on launch.")
+            if auto_val != cloud_settings.get("auto_sync", True):
+                cloud_settings["auto_sync"] = auto_val
+                cloud_settings["github_token"] = token_val.strip()
+                cloud_settings["gist_id"] = gist_val.strip()
+                dm.save_data(data, auto_cloud_sync=False)
+                st.toast(f"Auto-Sync {'enabled' if auto_val else 'disabled'}!")
+
             cs_c1, cs_c2 = st.columns(2)
             with cs_c1:
                 if st.button("☁️ Push to Cloud", use_container_width=True, type="primary", key="btn_push_cloud"):
@@ -2484,7 +2519,7 @@ def main() -> None:
                                 cloud_settings["github_token"] = token_val.strip()
                                 cloud_settings["gist_id"] = new_gist
                                 cloud_settings["last_synced"] = dm.get_today_key()
-                                dm.save_data(data)
+                                dm.save_data(data, auto_cloud_sync=False)
                                 st.success(f"Synced to Cloud! Gist ID: `{new_gist}`")
                                 st.caption("Save this Gist ID to paste on your deployed website.")
                                 st.rerun()

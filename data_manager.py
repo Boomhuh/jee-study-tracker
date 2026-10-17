@@ -2,6 +2,8 @@
 import json
 import os
 import uuid
+import threading
+import copy
 from datetime import date, timedelta
 from typing import Dict, List, Optional, Any, Iterator
 
@@ -702,11 +704,16 @@ def load_data() -> Dict[str, Any]:
         return initial_data
 
 
-def save_data(data: Dict[str, Any]) -> None:
-    """Recalculates all progress and writes the updated data to study_data.json."""
+def save_data(data: Dict[str, Any], auto_cloud_sync: bool = True) -> None:
+    """Recalculates all progress, writes to study_data.json, and triggers background cloud sync if enabled."""
     recalculate_all_progress(data)
     with open(DATA_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
+
+    if auto_cloud_sync:
+        cfg = get_cloud_sync_config(data)
+        if cfg["auto_sync"] and cfg["github_token"] and cfg["gist_id"]:
+            trigger_async_cloud_push(data, cfg["github_token"], cfg["gist_id"])
 
 
 # =====================================================================
@@ -1682,6 +1689,33 @@ def get_pdf_path(pdf_entry: Dict[str, Any]) -> str:
 # CLOUD DATA SYNCHRONIZATION (GITHUB GIST & REMOTE REST SYNC)
 # =====================================================================
 
+def get_cloud_sync_config(data: Dict[str, Any]) -> Dict[str, Any]:
+    """Retrieves cloud sync settings safely."""
+    cs = data.setdefault("settings", {}).setdefault("cloud_sync", {})
+    return {
+        "github_token": cs.get("github_token", "").strip(),
+        "gist_id": cs.get("gist_id", "").strip(),
+        "auto_sync": bool(cs.get("auto_sync", True)),
+        "last_synced": cs.get("last_synced", "")
+    }
+
+
+def trigger_async_cloud_push(data: Dict[str, Any], token: str, gist_id: str) -> None:
+    """Spawns a background daemon thread to push data to GitHub Gist without blocking the UI."""
+    if not token or not gist_id:
+        return
+    data_snapshot = copy.deepcopy(data)
+
+    def _worker():
+        try:
+            push_to_github_gist(data_snapshot, token, gist_id)
+        except Exception:
+            pass
+
+    t = threading.Thread(target=_worker, daemon=True)
+    t.start()
+
+
 def push_to_github_gist(data: Dict[str, Any], token: str, gist_id: str = "") -> Dict[str, Any]:
     """Pushes study_data.json to a private GitHub Gist for cross-device cloud sync."""
     import urllib.request
@@ -1720,6 +1754,12 @@ def push_to_github_gist(data: Dict[str, Any], token: str, gist_id: str = "") -> 
                 "updated_at": res_json.get("updated_at"),
                 "url": res_json.get("html_url")
             }
+    except urllib.error.HTTPError as he:
+        if he.code == 401:
+            return {"success": False, "error": "Invalid/Expired GitHub Token (Bad credentials). Please generate a new classic token with 'gist' scope at github.com/settings/tokens."}
+        elif he.code == 404:
+            return {"success": False, "error": "Gist not found. Clear the Gist ID field to create a new Gist automatically."}
+        return {"success": False, "error": f"HTTP {he.code}: {he.reason}"}
     except Exception as e:
         return {"success": False, "error": str(e)}
 
@@ -1727,6 +1767,7 @@ def push_to_github_gist(data: Dict[str, Any], token: str, gist_id: str = "") -> 
 def pull_from_github_gist(token: str, gist_id: str) -> Dict[str, Any]:
     """Pulls study_data.json from a private GitHub Gist for cross-device cloud sync."""
     import urllib.request
+    import urllib.error
     token = token.strip()
     gist_id = gist_id.strip()
     if not token or not gist_id:
@@ -1753,5 +1794,11 @@ def pull_from_github_gist(token: str, gist_id: str) -> Dict[str, Any]:
                 }
             else:
                 return {"success": False, "error": "'study_data.json' not found in this Gist."}
+    except urllib.error.HTTPError as he:
+        if he.code == 401:
+            return {"success": False, "error": "Invalid/Expired GitHub Token. Please check your token at github.com/settings/tokens."}
+        elif he.code == 404:
+            return {"success": False, "error": f"Gist ID '{gist_id}' not found."}
+        return {"success": False, "error": f"HTTP {he.code}: {he.reason}"}
     except Exception as e:
         return {"success": False, "error": str(e)}

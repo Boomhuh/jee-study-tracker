@@ -3,7 +3,13 @@
     "dark_mode": true,
     "target_exam_date": "2028-01-24T09:00:00",
     "daily_goal_minutes": 360,
-    "auto_dark_mode": false
+    "auto_dark_mode": false,
+    "cloud_sync": {
+      "github_token": "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",
+      "gist_id": "60770ceeb28b09397b64189bfd05abea",
+      "auto_sync": true,
+      "last_synced": "2026-10-17"
+    }
   },
   "pomodoro_stats": {
     "sessions_completed": 0,
@@ -11,7 +17,138 @@
   },
   "daily_focus": {
     "date": "2026-10-17",
-    "items": []
+    "items": [
+      {
+        "key": "Chemistry:eb9a8659:46c7bcaf",
+        "subject": "Chemistry",
+        "chapter_id": "eb9a8659",
+        "chapter_name": "Chemical Bonding & Molecular Structure",
+        "title": "Molecular Orbital Theory (MOT) & Bond Order",
+        "priority": "High",
+        "difficulty": "Hard",
+        "due_date": "",
+        "estimated_minutes": 0,
+        "is_custom": false,
+        "done": false
+      },
+      {
+        "key": "Mathematics:77d68c38:200ee390",
+        "subject": "Mathematics",
+        "chapter_id": "77d68c38",
+        "chapter_name": "Matrices & Determinants",
+        "title": "Adjoint, Inverse, & System of Linear Equations (Cramer's Rule)",
+        "priority": "High",
+        "difficulty": "Hard",
+        "due_date": "",
+        "estimated_minutes": 0,
+        "is_custom": false,
+        "done": false
+      },
+      {
+        "key": "Mathematics:13060b13:d59acd7f",
+        "subject": "Mathematics",
+        "chapter_id": "13060b13",
+        "chapter_name": "Quadratic Equations",
+        "title": "Location of Roots (Advanced Conditions)",
+        "priority": "High",
+        "difficulty": "Hard",
+        "due_date": "",
+        "estimated_minutes": 0,
+        "is_custom": false,
+        "done": false
+      },
+      {
+        "key": "Physics:7d0471ce:b156c921",
+        "subject": "Physics",
+        "chapter_id": "7d0471ce",
+        "chapter_name": "Kinematics & Projectile Motion",
+        "title": "Rain-Man & River-Boat Problems",
+        "priority": "High",
+        "difficulty": "Hard",
+        "due_date": "",
+        "estimated_minutes": 0,
+        "is_custom": false,
+        "done": false
+      },
+      {
+        "key": "Physics:7d0471ce:2f322acc",
+        "subject": "Physics",
+        "chapter_id": "7d0471ce",
+        "chapter_name": "Kinematics & Projectile Motion",
+        "title": "Solve 2019-2024 PYQs",
+        "priority": "High",
+        "difficulty": "Hard",
+        "due_date": "",
+        "estimated_minutes": 0,
+        "is_custom": false,
+        "done": false
+      },
+      {
+        "key": "Chemistry:2e022f06:662caba9",
+        "subject": "Chemistry",
+        "chapter_id": "2e022f06",
+        "chapter_name": "Atomic Structure",
+        "title": "Bohr's Model & Rydberg Formula",
+        "priority": "High",
+        "difficulty": "Medium",
+        "due_date": "",
+        "estimated_minutes": 0,
+        "is_custom": false,
+        "done": false
+      },
+      {
+        "key": "Chemistry:eb9a8659:1b559286",
+        "subject": "Chemistry",
+        "chapter_id": "eb9a8659",
+        "chapter_name": "Chemical Bonding & Molecular Structure",
+        "title": "Hybridization (sp, sp2, sp3, sp3d)",
+        "priority": "High",
+        "difficulty": "Medium",
+        "due_date": "",
+        "estimated_minutes": 0,
+        "is_custom": false,
+        "done": false
+      },
+      {
+        "key": "Mathematics:77d68c38:8cf1c820",
+        "subject": "Mathematics",
+        "chapter_id": "77d68c38",
+        "chapter_name": "Matrices & Determinants",
+        "title": "Determinant Properties & Row/Col Operations",
+        "priority": "High",
+        "difficulty": "Medium",
+        "due_date": "",
+        "estimated_minutes": 0,
+        "is_custom": false,
+        "done": false
+      },
+      {
+        "key": "Physics:7d0471ce:a23cabf0",
+        "subject": "Physics",
+        "chapter_id": "7d0471ce",
+        "chapter_name": "Kinematics & Projectile Motion",
+        "title": "2D Motion & Projectile Problems",
+        "priority": "High",
+        "difficulty": "Medium",
+        "due_date": "",
+        "estimated_minutes": 0,
+        "is_custom": false,
+        "done": false
+      },
+      {
+        "key": "Physics:82157b82:cb1ebd8c",
+        "subject": "Physics",
+        "chapter_id": "82157b82",
+        "chapter_name": "Laws of Motion & Friction",
+        "title": "Free Body Diagrams & Newton's 2nd Law",
+        "priority": "High",
+        "difficulty": "Medium",
+        "due_date": "",
+        "estimated_minutes": 0,
+        "is_custom": false,
+        "done": false
+      }
+    ]
   },
   "streak": {
     "current": 0,
@@ -48,7 +185,8 @@
               "difficulty": "Easy",
               "due_date": "",
               "progress": 0.0,
-              "subtasks": []
+              "subtasks": [],
+              "estimated_minutes": 0
             },
             {
               "id": "a23cabf0",
@@ -58,7 +196,8 @@
               "difficulty": "Medium",
               "due_date": "",
               "progress": 0.0,
-              "subtasks": []
+              "subtasks": [],
+              "estimated_minutes": 0
             },
             {
               "id": "c008c41e",
@@ -77,7 +216,8 @@
                   "difficulty": "Hard",
                   "due_date": "",
                   "progress": 0.0,
-                  "subtasks": []
+                  "subtasks": [],
+                  "estimated_minutes": 0
                 },
                 {
                   "id": "87cdc24a",
@@ -87,9 +227,11 @@
                   "difficulty": "Medium",
                   "due_date": "",
                   "progress": 0.0,
-                  "subtasks": []
+                  "subtasks": [],
+                  "estimated_minutes": 0
                 }
-              ]
+              ],
+              "estimated_minutes": 0
             },
             {
               "id": "2f322acc",
@@ -99,7 +241,8 @@
               "difficulty": "Hard",
               "due_date": "",
               "progress": 0.0,
-              "subtasks": []
+              "subtasks": [],
+              "estimated_minutes": 0
             },
             {
               "id": "8248c96f",
@@ -131,7 +274,8 @@
               "difficulty": "Medium",
               "due_date": "",
               "progress": 0.0,
-              "subtasks": []
+              "subtasks": [],
+              "estimated_minutes": 0
             },
             {
               "id": "119d6c8a",
@@ -141,7 +285,8 @@
               "difficulty": "Hard",
               "due_date": "",
               "progress": 0.0,
-              "subtasks": []
+              "subtasks": [],
+              "estimated_minutes": 0
             },
             {
               "id": "55fce974",
@@ -151,7 +296,8 @@
               "difficulty": "Medium",
               "due_date": "",
               "progress": 0.0,
-              "subtasks": []
+              "subtasks": [],
+              "estimated_minutes": 0
             }
           ]
         }
@@ -177,7 +323,8 @@
               "difficulty": "Easy",
               "due_date": "",
               "progress": 0.0,
-              "subtasks": []
+              "subtasks": [],
+              "estimated_minutes": 0
             },
             {
               "id": "1b559286",
@@ -187,7 +334,8 @@
               "difficulty": "Medium",
               "due_date": "",
               "progress": 0.0,
-              "subtasks": []
+              "subtasks": [],
+              "estimated_minutes": 0
             },
             {
               "id": "46c7bcaf",
@@ -197,7 +345,8 @@
               "difficulty": "Hard",
               "due_date": "",
               "progress": 0.0,
-              "subtasks": []
+              "subtasks": [],
+              "estimated_minutes": 0
             },
             {
               "id": "ea965c24",
@@ -207,7 +356,8 @@
               "difficulty": "Medium",
               "due_date": "",
               "progress": 0.0,
-              "subtasks": []
+              "subtasks": [],
+              "estimated_minutes": 0
             }
           ]
         },
@@ -228,7 +378,8 @@
               "difficulty": "Medium",
               "due_date": "",
               "progress": 0.0,
-              "subtasks": []
+              "subtasks": [],
+              "estimated_minutes": 0
             },
             {
               "id": "16018d5b",
@@ -238,7 +389,8 @@
               "difficulty": "Medium",
               "due_date": "",
               "progress": 0.0,
-              "subtasks": []
+              "subtasks": [],
+              "estimated_minutes": 0
             },
             {
               "id": "9b0653ac",
@@ -248,7 +400,8 @@
               "difficulty": "Easy",
               "due_date": "",
               "progress": 0.0,
-              "subtasks": []
+              "subtasks": [],
+              "estimated_minutes": 0
             }
           ]
         }
@@ -274,7 +427,8 @@
               "difficulty": "Easy",
               "due_date": "",
               "progress": 0.0,
-              "subtasks": []
+              "subtasks": [],
+              "estimated_minutes": 0
             },
             {
               "id": "d59acd7f",
@@ -284,7 +438,8 @@
               "difficulty": "Hard",
               "due_date": "",
               "progress": 0.0,
-              "subtasks": []
+              "subtasks": [],
+              "estimated_minutes": 0
             },
             {
               "id": "a300f97c",
@@ -294,7 +449,8 @@
               "difficulty": "Medium",
               "due_date": "",
               "progress": 0.0,
-              "subtasks": []
+              "subtasks": [],
+              "estimated_minutes": 0
             }
           ]
         },
@@ -315,7 +471,8 @@
               "difficulty": "Easy",
               "due_date": "",
               "progress": 0.0,
-              "subtasks": []
+              "subtasks": [],
+              "estimated_minutes": 0
             },
             {
               "id": "8cf1c820",
@@ -325,7 +482,8 @@
               "difficulty": "Medium",
               "due_date": "",
               "progress": 0.0,
-              "subtasks": []
+              "subtasks": [],
+              "estimated_minutes": 0
             },
             {
               "id": "200ee390",
@@ -335,7 +493,8 @@
               "difficulty": "Hard",
               "due_date": "",
               "progress": 0.0,
-              "subtasks": []
+              "subtasks": [],
+              "estimated_minutes": 0
             }
           ]
         }
