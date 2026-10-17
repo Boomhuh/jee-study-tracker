@@ -449,6 +449,12 @@ def ensure_schema_migration(data: Dict[str, Any]) -> Dict[str, Any]:
         data["settings"].setdefault("target_exam_date", "2028-01-24T09:00:00")
         data["settings"].setdefault("daily_goal_minutes", 360)
         data["settings"].setdefault("auto_dark_mode", False)
+        data["settings"].setdefault("cloud_sync", {
+            "github_token": "",
+            "gist_id": "",
+            "auto_sync": False,
+            "last_synced": ""
+        })
 
     if "pomodoro_stats" not in data:
         data["pomodoro_stats"] = {
@@ -1654,3 +1660,98 @@ def delete_chapter_video(data: Dict[str, Any], subject: str, chapter_id: str, vi
         save_data(data)
         return True
     return False
+
+
+def get_pdf_path(pdf_entry: Dict[str, Any]) -> str:
+    """Dynamically resolves the absolute path to a chapter PDF across both Windows and Linux."""
+    stored_name = pdf_entry.get("stored_filename") or pdf_entry.get("filename", "")
+    target = os.path.join(RESOURCES_DIR, stored_name)
+    if os.path.exists(target):
+        return target
+    raw_path = pdf_entry.get("file_path", "")
+    if raw_path and os.path.exists(raw_path):
+        return raw_path
+    if raw_path:
+        base_target = os.path.join(RESOURCES_DIR, os.path.basename(raw_path))
+        if os.path.exists(base_target):
+            return base_target
+    return target
+
+
+# =====================================================================
+# CLOUD DATA SYNCHRONIZATION (GITHUB GIST & REMOTE REST SYNC)
+# =====================================================================
+
+def push_to_github_gist(data: Dict[str, Any], token: str, gist_id: str = "") -> Dict[str, Any]:
+    """Pushes study_data.json to a private GitHub Gist for cross-device cloud sync."""
+    import urllib.request
+    token = token.strip()
+    if not token:
+        return {"success": False, "error": "GitHub Personal Access Token is required."}
+
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Accept": "application/vnd.github+json",
+        "User-Agent": "JEE-Study-Tracker"
+    }
+    payload = {
+        "description": "JEE 2028 Study Tracker Cloud Sync Data",
+        "public": False,
+        "files": {
+            "study_data.json": {
+                "content": json.dumps(data, indent=2)
+            }
+        }
+    }
+    data_bytes = json.dumps(payload).encode("utf-8")
+    try:
+        if gist_id.strip():
+            url = f"https://api.github.com/gists/{gist_id.strip()}"
+            req = urllib.request.Request(url, data=data_bytes, headers=headers, method="PATCH")
+        else:
+            url = "https://api.github.com/gists"
+            req = urllib.request.Request(url, data=data_bytes, headers=headers, method="POST")
+
+        with urllib.request.urlopen(req, timeout=12) as response:
+            res_json = json.loads(response.read().decode("utf-8"))
+            return {
+                "success": True,
+                "gist_id": res_json.get("id"),
+                "updated_at": res_json.get("updated_at"),
+                "url": res_json.get("html_url")
+            }
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
+
+def pull_from_github_gist(token: str, gist_id: str) -> Dict[str, Any]:
+    """Pulls study_data.json from a private GitHub Gist for cross-device cloud sync."""
+    import urllib.request
+    token = token.strip()
+    gist_id = gist_id.strip()
+    if not token or not gist_id:
+        return {"success": False, "error": "Both Token and Gist ID are required to pull data."}
+
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Accept": "application/vnd.github+json",
+        "User-Agent": "JEE-Study-Tracker"
+    }
+    url = f"https://api.github.com/gists/{gist_id}"
+    try:
+        req = urllib.request.Request(url, headers=headers, method="GET")
+        with urllib.request.urlopen(req, timeout=12) as response:
+            res_json = json.loads(response.read().decode("utf-8"))
+            files = res_json.get("files", {})
+            if "study_data.json" in files:
+                content = files["study_data.json"].get("content", "")
+                remote_data = json.loads(content)
+                return {
+                    "success": True,
+                    "data": remote_data,
+                    "updated_at": res_json.get("updated_at")
+                }
+            else:
+                return {"success": False, "error": "'study_data.json' not found in this Gist."}
+    except Exception as e:
+        return {"success": False, "error": str(e)}

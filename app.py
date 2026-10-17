@@ -7,6 +7,7 @@ import base64
 import importlib
 from datetime import datetime, date, timedelta
 import streamlit as st
+import streamlit.components.v1 as components
 from typing import Dict, Any, List, Optional
 
 import data_manager as dm
@@ -33,6 +34,276 @@ def normalize_youtube_url(url: str) -> str:
     if watch_match:
         return f"https://www.youtube.com/watch?v={watch_match.group(1)}"
     return url
+
+
+def render_pdf_viewer_component(pdf_bytes: bytes, filename: str = "document.pdf", height: int = 700) -> None:
+    """Renders a responsive, interactive in-app PDF reader with page controls and zoom using PDF.js."""
+    b64_pdf = base64.b64encode(pdf_bytes).decode("utf-8")
+    
+    html_code = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+        <style>
+            * {{ box-sizing: border-box; margin: 0; padding: 0; }}
+            body {{
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+                background-color: #0F172A;
+                color: #F8FAFC;
+                padding: 6px;
+                overflow: hidden;
+            }}
+            .toolbar {{
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: space-between;
+                gap: 8px;
+                background: #1E293B;
+                padding: 8px 12px;
+                border-radius: 8px;
+                border: 1px solid #334155;
+                margin-bottom: 8px;
+            }}
+            .btn-group {{
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }}
+            button {{
+                background: #334155;
+                color: #F8FAFC;
+                border: 1px solid #475569;
+                border-radius: 5px;
+                padding: 5px 10px;
+                font-size: 12px;
+                cursor: pointer;
+                transition: background 0.15s, border-color 0.15s;
+                font-weight: 600;
+            }}
+            button:hover {{
+                background: #3B82F6;
+                border-color: #2563EB;
+                color: #FFFFFF;
+            }}
+            button:disabled {{
+                opacity: 0.4;
+                cursor: not-allowed;
+            }}
+            .page-info {{
+                font-size: 13px;
+                font-weight: 600;
+                color: #CBD5E1;
+                margin: 0 4px;
+            }}
+            #pdf-container {{
+                width: 100%;
+                height: {height - 80}px;
+                overflow: auto;
+                background: #020617;
+                border: 1px solid #334155;
+                border-radius: 8px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 12px 6px;
+            }}
+            #pdf-canvas {{
+                box-shadow: 0 4px 14px rgba(0,0,0,0.5);
+                border-radius: 4px;
+                max-width: 100%;
+            }}
+            #loading-msg {{
+                color: #94A3B8;
+                font-size: 13px;
+                margin-top: 30px;
+            }}
+            #fallback-embed {{
+                display: none;
+                width: 100%;
+                height: 100%;
+                border: none;
+            }}
+        </style>
+    </head>
+    <body>
+        <div class="toolbar">
+            <div class="btn-group">
+                <button id="prev-btn" onclick="onPrevPage()">◀ Prev</button>
+                <span class="page-info">Page <span id="page-num">1</span> / <span id="page-count">-</span></span>
+                <button id="next-btn" onclick="onNextPage()">Next ▶</button>
+            </div>
+            <div class="btn-group">
+                <button onclick="zoomOut()">🔍 -</button>
+                <button onclick="zoomReset()">100%</button>
+                <button onclick="zoomIn()">🔍 +</button>
+                <button onclick="fitWidth()">⤢ Fit Width</button>
+            </div>
+            <div class="btn-group">
+                <button id="open-tab-btn" onclick="openInNewTab()">↗ Open in New Tab</button>
+            </div>
+        </div>
+
+        <div id="pdf-container">
+            <div id="loading-msg">⏳ Rendering PDF preview...</div>
+            <canvas id="pdf-canvas" style="display:none;"></canvas>
+            <embed id="fallback-embed" type="application/pdf" />
+        </div>
+
+        <script>
+            const b64Data = "{b64_pdf}";
+            let pdfDoc = null;
+            let pageNum = 1;
+            let pageRendering = false;
+            let pageNumPending = null;
+            let scale = 1.2;
+            const canvas = document.getElementById('pdf-canvas');
+            const ctx = canvas.getContext('2d');
+            const loadingMsg = document.getElementById('loading-msg');
+            let pdfBlobUrl = null;
+
+            try {{
+                const byteCharacters = atob(b64Data);
+                const byteNumbers = new Array(byteCharacters.length);
+                for (let i = 0; i < byteCharacters.length; i++) {{
+                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                }}
+                const byteArray = new Uint8Array(byteNumbers);
+                const blob = new Blob([byteArray], {{ type: 'application/pdf' }});
+                pdfBlobUrl = URL.createObjectURL(blob);
+            }} catch (e) {{
+                console.error("Blob error:", e);
+            }}
+
+            function openInNewTab() {{
+                if (pdfBlobUrl) {{
+                    window.open(pdfBlobUrl, '_blank');
+                }} else {{
+                    const win = window.open();
+                    win.document.write('<iframe src="data:application/pdf;base64,' + b64Data + '" frameborder="0" style="border:0; top:0; left:0; bottom:0; right:0; width:100%; height:100%;" allowfullscreen></iframe>');
+                }}
+            }}
+
+            function renderPage(num) {{
+                pageRendering = true;
+                pdfDoc.getPage(num).then(function(page) {{
+                    const viewport = page.getViewport({{ scale: scale }});
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+
+                    const renderContext = {{
+                        canvasContext: ctx,
+                        viewport: viewport
+                    }};
+                    const renderTask = page.render(renderContext);
+
+                    renderTask.promise.then(function() {{
+                        pageRendering = false;
+                        canvas.style.display = 'block';
+                        loadingMsg.style.display = 'none';
+                        if (pageNumPending !== null) {{
+                            renderPage(pageNumPending);
+                            pageNumPending = null;
+                        }}
+                    }}).catch(function(err) {{
+                        console.error("Render error:", err);
+                    }});
+                }});
+
+                document.getElementById('page-num').textContent = num;
+                document.getElementById('prev-btn').disabled = (num <= 1);
+                document.getElementById('next-btn').disabled = (num >= pdfDoc.numPages);
+            }}
+
+            function queueRenderPage(num) {{
+                if (pageRendering) {{
+                    pageNumPending = num;
+                }} else {{
+                    renderPage(num);
+                }}
+            }}
+
+            function onPrevPage() {{
+                if (pageNum <= 1) return;
+                pageNum--;
+                queueRenderPage(pageNum);
+            }}
+
+            function onNextPage() {{
+                if (pageNum >= pdfDoc.numPages) return;
+                pageNum++;
+                queueRenderPage(pageNum);
+            }}
+
+            function zoomIn() {{
+                scale += 0.2;
+                queueRenderPage(pageNum);
+            }}
+
+            function zoomOut() {{
+                if (scale > 0.4) {{
+                    scale -= 0.2;
+                    queueRenderPage(pageNum);
+                }}
+            }}
+
+            function zoomReset() {{
+                scale = 1.2;
+                queueRenderPage(pageNum);
+            }}
+
+            function fitWidth() {{
+                const container = document.getElementById('pdf-container');
+                const availableWidth = container.clientWidth - 40;
+                if (pdfDoc && availableWidth > 100) {{
+                    pdfDoc.getPage(pageNum).then(function(page) {{
+                        const unscaledViewport = page.getViewport({{ scale: 1.0 }});
+                        scale = Math.max(0.4, (availableWidth / unscaledViewport.width));
+                        queueRenderPage(pageNum);
+                    }});
+                }}
+            }}
+
+            if (typeof pdfjsLib !== 'undefined') {{
+                pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+                
+                try {{
+                    const rawData = atob(b64Data);
+                    const uint8Array = new Uint8Array(rawData.length);
+                    for (let i = 0; i < rawData.length; i++) {{
+                        uint8Array[i] = rawData.charCodeAt(i);
+                    }}
+
+                    pdfjsLib.getDocument({{ data: uint8Array }}).promise.then(function(pdfDoc_) {{
+                        pdfDoc = pdfDoc_;
+                        document.getElementById('page-count').textContent = pdfDoc.numPages;
+                        renderPage(pageNum);
+                    }}).catch(function(err) {{
+                        console.warn("PDF.js parse failed, falling back to embed:", err);
+                        fallbackToEmbed();
+                    }});
+                }} catch (e) {{
+                    console.warn("Decode failed:", e);
+                    fallbackToEmbed();
+                }}
+            }} else {{
+                fallbackToEmbed();
+            }}
+
+            function fallbackToEmbed() {{
+                loadingMsg.style.display = 'none';
+                const embed = document.getElementById('fallback-embed');
+                embed.src = pdfBlobUrl || ("data:application/pdf;base64," + b64Data);
+                embed.style.display = 'block';
+            }}
+        </script>
+    </body>
+    </html>
+    """
+    components.html(html_code, height=height, scrolling=False)
 
 
 # =====================================================================
@@ -1990,7 +2261,14 @@ def render_chapter_resources_view(dark_mode: bool) -> None:
                 p_id = p.get("id")
                 size_kb = p.get("size_bytes", 0) / 1024.0
                 size_str = f"{size_kb / 1024.0:.2f} MB" if size_kb >= 1024 else f"{size_kb:.1f} KB"
-                file_path = p.get("file_path", "")
+                file_path = dm.get_pdf_path(p)
+                pdf_data = None
+                if os.path.exists(file_path):
+                    try:
+                        with open(file_path, "rb") as f:
+                            pdf_data = f.read()
+                    except Exception:
+                        pdf_data = None
 
                 with st.container():
                     pc1, pc2, pc3 = st.columns([5.5, 3.0, 1.5])
@@ -1998,10 +2276,7 @@ def render_chapter_resources_view(dark_mode: bool) -> None:
                         st.markdown(f"**📄 {p.get('title')}**")
                         st.caption(f"Filename: `{p.get('filename')}` • Size: `{size_str}` • Uploaded: `{p.get('uploaded_at')}`")
                     with pc2:
-                        pdf_data = None
-                        if os.path.exists(file_path):
-                            with open(file_path, "rb") as f:
-                                pdf_data = f.read()
+                        if pdf_data is not None:
                             st.download_button(
                                 label="⬇️ Download / Save",
                                 data=pdf_data,
@@ -2019,15 +2294,15 @@ def render_chapter_resources_view(dark_mode: bool) -> None:
                                 dm.delete_chapter_pdf(data, selected_subj, selected_chap_id, p_id)
                                 st.rerun()
 
-                    # In-App PDF Preview
+                    # In-App PDF Reader & Viewer
                     if pdf_data is not None:
-                        with st.expander(f"👁️ Read / Preview '{p.get('title')}' in App", expanded=False):
+                        with st.expander(f"📖 Read / Preview '{p.get('title')}' in App", expanded=False):
                             try:
-                                b64_pdf = base64.b64encode(pdf_data).decode("utf-8")
-                                pdf_display = f'<iframe src="data:application/pdf;base64,{b64_pdf}" width="100%" height="600" type="application/pdf" style="border:1px solid #475569; border-radius:6px;"></iframe>'
-                                st.markdown(pdf_display, unsafe_allow_html=True)
+                                render_pdf_viewer_component(pdf_data, filename=p.get("filename", "document.pdf"), height=720)
                             except Exception as err:
                                 st.caption(f"Preview unavailable: {err}")
+                    else:
+                        st.info("⚠️ PDF file content is missing on disk. Please re-upload your notes or DPP.")
 
                     st.markdown("<hr style='margin:4px 0 8px 0; border:0; border-top:1px solid rgba(148,163,184,0.15);'>", unsafe_allow_html=True)
 
@@ -2176,6 +2451,70 @@ def main() -> None:
                         st.rerun()
                     except Exception as err:
                         st.error(f"Failed to restore backup: {err}")
+
+        # Cloud Cross-Device Synchronization
+        with st.expander("☁️ Cloud Cross-Device Sync", expanded=False):
+            st.caption("Sync your streak, test scores, formulas, and progress between this PC and your deployed website.")
+            cloud_settings = data.setdefault("settings", {}).setdefault("cloud_sync", {})
+
+            sec_token = ""
+            sec_gist_id = ""
+            try:
+                sec_token = st.secrets.get("GITHUB_TOKEN", "")
+                sec_gist_id = st.secrets.get("GIST_ID", "")
+            except Exception:
+                pass
+
+            curr_token = cloud_settings.get("github_token", "") or sec_token
+            curr_gist = cloud_settings.get("gist_id", "") or sec_gist_id
+
+            token_val = st.text_input("GitHub Token (PAT with 'gist' scope)", value=curr_token, type="password", key="sync_token_input", help="Generate at github.com/settings/tokens with 'gist' permission.")
+            gist_val = st.text_input("Gist ID (leave empty to create new)", value=curr_gist, key="sync_gist_input", placeholder="e.g. 7f3a8b... or empty to create new")
+
+            cs_c1, cs_c2 = st.columns(2)
+            with cs_c1:
+                if st.button("☁️ Push to Cloud", use_container_width=True, type="primary", key="btn_push_cloud"):
+                    if not token_val.strip():
+                        st.error("Please enter a GitHub Personal Access Token.")
+                    else:
+                        with st.spinner("Pushing data to cloud Gist..."):
+                            res = dm.push_to_github_gist(data, token_val.strip(), gist_val.strip())
+                            if res.get("success"):
+                                new_gist = res.get("gist_id", "")
+                                cloud_settings["github_token"] = token_val.strip()
+                                cloud_settings["gist_id"] = new_gist
+                                cloud_settings["last_synced"] = dm.get_today_key()
+                                dm.save_data(data)
+                                st.success(f"Synced to Cloud! Gist ID: `{new_gist}`")
+                                st.caption("Save this Gist ID to paste on your deployed website.")
+                                st.rerun()
+                            else:
+                                st.error(f"Push failed: {res.get('error')}")
+
+            with cs_c2:
+                if st.button("🔄 Pull from Cloud", use_container_width=True, key="btn_pull_cloud"):
+                    if not token_val.strip() or not gist_val.strip():
+                        st.error("Need Token and Gist ID to pull.")
+                    else:
+                        with st.spinner("Fetching latest data from cloud Gist..."):
+                            res = dm.pull_from_github_gist(token_val.strip(), gist_val.strip())
+                            if res.get("success"):
+                                remote_data = res.get("data", {})
+                                migrated = dm.ensure_schema_migration(remote_data)
+                                migrated.setdefault("settings", {})
+                                migrated["settings"].setdefault("cloud_sync", {})
+                                migrated["settings"]["cloud_sync"]["github_token"] = token_val.strip()
+                                migrated["settings"]["cloud_sync"]["gist_id"] = gist_val.strip()
+                                migrated["settings"]["cloud_sync"]["last_synced"] = dm.get_today_key()
+                                dm.save_data(migrated)
+                                st.session_state.study_data = migrated
+                                st.toast("Successfully pulled cloud data!", icon="✅")
+                                st.rerun()
+                            else:
+                                st.error(f"Pull failed: {res.get('error')}")
+
+            if cloud_settings.get("last_synced"):
+                st.caption(f"Last synced: `{cloud_settings.get('last_synced')}` • Gist: `{cloud_settings.get('gist_id')}`")
 
         # Reset Syllabus with Confirmation Popover
         with st.popover("🔄 Reset to Default Syllabus"):

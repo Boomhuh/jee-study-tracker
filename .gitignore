@@ -9,13 +9,8 @@ venv/
 ENV/
 env/
 
-# Streamlit run cache
-.streamlit/
+# Streamlit secrets (keep private API tokens safe)
+.streamlit/secrets.toml
 
 # Local testing
 .pytest_cache/
-
-# User uploaded media & local PDFs
-chapter_resources/*
-!chapter_resources/.gitkeep
-
